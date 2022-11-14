@@ -1,0 +1,64 @@
+body {
+    font-family: monospace;
+    font-size: 150%;
+}
+
+.scores {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+
+.timer {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+a {
+    color: #FF44C4;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #D244FF;
+}
+
+#start-screen {
+    text-align: center;
+    margin: 100px auto 0 auto;
+    width: 50%;
+}
+
+#questions {
+    text-align: left;
+    margin: 100px auto 0 auto;
+    width: 50%;
+}
+
+#end-screen {
+    text-align: center;
+    margin: 100px auto 0 auto;
+    width: 50%;
+    display: none;
+}
+
+button {
+    display: inline-block;
+    background-color: #DA3BA8;
+    color:aliceblue;
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 100%;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    box-shadow: 5px 5px #6A6668;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #D244FF; 
+}
+
+input[type="text"] {
+    font-size: 100%;
+}
