@@ -62,3 +62,14 @@ button:hover {
 input[type="text"] {
     font-size: 100%;
 }
+
+ol {
+    padding-left: 0px;
+    max-height: 500px;
+    overflow: auto;
+}
+
+li {
+    padding: 5px;
+    list-style: upper-latin inside none;
+}
