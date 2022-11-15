@@ -1,6 +1,7 @@
 body {
     font-family: monospace;
     font-size: 150%;
+    line-height: 1.5;
 }
 
 .scores {
@@ -24,20 +25,14 @@ a:hover {
     color: #D244FF;
 }
 
-#start-screen {
+.start {
     text-align: center;
     margin: 100px auto 0 auto;
     width: 50%;
 }
 
-#questions {
+.hide {
     text-align: left;
-    margin: 100px auto 0 auto;
-    width: 50%;
-}
-
-#end-screen {
-    text-align: center;
     margin: 100px auto 0 auto;
     width: 50%;
     display: none;
@@ -63,6 +58,16 @@ input[type="text"] {
     font-size: 100%;
 }
 
+.questions {
+    text-align: left;
+    margin: 500px auto 0 auto;
+    width: 40%;
+}
+
+.choices {
+    margin-right: 20px;
+}
+
 ol {
     padding-left: 0px;
     max-height: 500px;
@@ -72,4 +77,13 @@ ol {
 li {
     padding: 5px;
     list-style: upper-latin inside none;
+}
+
+.feedback {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 120%;
+    color:#FFA9E4;
+    font-style: italic;
+    display: block;
+    border-top: 1px dashed #B4A8B0;
 }
