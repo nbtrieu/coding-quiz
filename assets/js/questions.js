@@ -26,5 +26,3 @@ let questions = [
         answer: 'DOM',
     }
 ]
-
-console.log(questions.length);

@@ -1,5 +1,5 @@
 let currentQuestionIndex = 0; // starting at the element at index=0 in the question array
-let timeLeft = 75; // questions.length * 10;
+let timeLeft = 75;
 let timeInterval;
 
 let timeElement = document.querySelector("#time-span");
@@ -8,7 +8,11 @@ let questionsElement = document.querySelector("#questions");
 let questionPromptElement = document.querySelector("#question-prompt"); // can this NOT be global??
 let choicesElement = document.querySelector("#choices");
 
-console.log(startButton);
+let endScreenElement = document.querySelector("#end-screen");
+let finalScore = document.querySelector("#final-score");
+let initialInput = document.querySelector("#initial");
+let submitButton = document.querySelector("#submit-button");
+
 startButton.addEventListener('click', startQuiz);
 
 function startQuiz() {
@@ -28,19 +32,26 @@ function startQuiz() {
 
         if (timeLeft >= 1) {
             timeElement.textContent = timeLeft;
-        } else if (timeLeft <= 0) {
-            clearInterval(timeInterval);
+        } else if (timeLeft <= 0 || currentQuestionIndex === 5) {
+            clearInterval(timeInterval); // WHY ISN'T MY TIMER STOPPING???******
+            timeElement.textContent = 0;
         }
     }, 1000);
 
-    // show questions and answer choices
+    // show questions and answer choices & penalize time for incorrect answers
     getQuestion();
+
 }
 
 function getQuestion() {
     // get each question from array of question objects in questions.js
+    if (currentQuestionIndex === 5) { // to prevent TypeError
+        showEndScreen();
+        return; // exit getQuestion
+    }
+    
     let currentQuestion = questions[currentQuestionIndex];
-    console.log(currentQuestion);
+    let correctAnswer = currentQuestion.answer;
 
     // question prompt h2 element is blank right now so we need to add text to it
     questionPromptElement.textContent = currentQuestion.prompt;
@@ -52,17 +63,60 @@ function getQuestion() {
     let choice = currentQuestion.choice;
     for (let i = 0; i < choice.length; i++) {
         let choiceButton = document.createElement("button");
-        choiceButton.setAttribute("class", "choices");
-        choiceButton.innerHTML = choice[i];
-        choicesElement.appendChild(choiceButton);
-        
-        console.log(choiceButton);
-        choiceButton.addEventListener('click', getQuestion);
+        choiceButton.setAttribute("class", "choices"); // to style the choice buttons
+        choiceButton.innerHTML = choice[i]; // to add text to choice buttons
+        choicesElement.appendChild(choiceButton); // to append choice buttons to the choice div container
+
+        choiceButton.addEventListener('click', getQuestion); // to show the next question when clicked
+        choiceButton.addEventListener('click', function() { // every button has this function but only the button that is clicked would run it! the button that is clicked is choice[i]!
+            let chosenAnswer = choice[i];
+            subtractTime(correctAnswer, chosenAnswer);
+        }); 
     }
 
     currentQuestionIndex++;
 }
 
-function subtractTime() {
-    
+function subtractTime(correctAnswer, chosenAnswer) { // need to pass in both parameters for comparison before penalty
+    console.log('show correct answer when subtractTime runs after clicking a choice button');
+    console.log(correctAnswer);
+    console.log('show chosen answer');
+    console.log(chosenAnswer);
+
+    // if (timeLeft === 0) {
+    //     return;
+    // }
+
+    if (chosenAnswer !== correctAnswer && timeLeft > 14) {
+        timeLeft -= 15;
+        console.log(timeLeft);
+    }
 }
+
+function showEndScreen() {
+    // hide questions
+    questionsElement.setAttribute("class", "hide");
+
+    // show end screen
+    endScreenElement.removeAttribute("class");
+
+    // render timeLeft as final score
+    finalScore.textContent = timeLeft;
+    console.log(finalScore);
+}
+
+// also need to store scores in local object so that i can take them out and display in highscores.html right?
+submitButton.addEventListener("click", function(event) {
+    event.preventDefault();
+
+    let initial = initialInput.value.trim();
+
+    if (initial !== '') {
+        let storedScores = {
+            initial: initial,
+            score: finalScore.textContent,
+        };
+
+        localStorage.setItem("stored scores", JSON.stringify(storedScores));
+    }
+})
