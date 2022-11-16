@@ -33,7 +33,7 @@ function startQuiz() {
         if (timeLeft >= 1) {
             timeElement.textContent = timeLeft;
         } else if (timeLeft <= 0 || currentQuestionIndex === 5) {
-            clearInterval(timeInterval); // WHY ISN'T MY TIMER STOPPING???******
+            clearInterval(timeInterval); // WHY ISN'T MY TIMER STOPPING???******PRK
             timeElement.textContent = 0;
         }
     }, 1000);
@@ -118,5 +118,7 @@ submitButton.addEventListener("click", function(event) {
         };
 
         localStorage.setItem("stored scores", JSON.stringify(storedScores));
+
+        window.location.href = 'score-record.html';
     }
 })

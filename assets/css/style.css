@@ -87,3 +87,7 @@ li {
     display: block;
     border-top: 1px dashed #B4A8B0;
 }
+
+#back-button a, #back-button a:hover {
+    color:aliceblue;
+}
