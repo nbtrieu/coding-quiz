@@ -58,12 +58,6 @@ input[type="text"] {
     font-size: 100%;
 }
 
-.questions {
-    text-align: left;
-    margin: 500px auto 0 auto;
-    width: 40%;
-}
-
 .choices {
     margin-right: 20px;
 }
@@ -72,11 +66,18 @@ ol {
     padding-left: 0px;
     max-height: 500px;
     overflow: auto;
+    margin-bottom: 50px;
 }
 
 li {
     padding: 5px;
-    list-style: upper-latin inside none;
+    text-transform: uppercase;
+    list-style: decimal inside none;
+    background-color: #FFA9E4;
+}
+
+li:nth-child(even) {
+    background-color: aliceblue;
 }
 
 .feedback {
@@ -90,4 +91,8 @@ li {
 
 #back-button a, #back-button a:hover {
     color:aliceblue;
+}
+
+.choices button {
+    text-transform: capitalize;
 }

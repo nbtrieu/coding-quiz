@@ -6,7 +6,7 @@ let questions = [
         answer: 'Lists',
     },
     {
-        prompt: 'Hoisting is the default behavior of JavaScript where all the variable and function declarations are moved to the _____',
+        prompt: 'Hoisting is the default behavior of JavaScript where all the variable and function declarations are moved to the _____.',
         choice: ['top', 'bottom', 'center', 'end'],
         answer: 'top',
     },

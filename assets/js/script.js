@@ -1,17 +1,21 @@
 let currentQuestionIndex = 0; // starting at the element at index=0 in the question array
 let timeLeft = 75;
 let timeInterval;
+let score;
 
 let timeElement = document.querySelector("#time-span");
 let startButton = document.querySelector("#start-button");
 let questionsElement = document.querySelector("#questions");
 let questionPromptElement = document.querySelector("#question-prompt"); // can this NOT be global??
 let choicesElement = document.querySelector("#choices");
+let feedbackElement = document.querySelector("#feedback");
 
 let endScreenElement = document.querySelector("#end-screen");
 let finalScore = document.querySelector("#final-score");
 let initialInput = document.querySelector("#initial");
 let submitButton = document.querySelector("#submit-button");
+
+feedbackElement.style.visibility = "hidden";
 
 startButton.addEventListener('click', startQuiz);
 
@@ -20,8 +24,11 @@ function startQuiz() {
     // hide start screen
     startScreenElement.setAttribute("class", "hide");
 
-    // unhide questions
+    // unhide questions and feedback
     questionsElement.removeAttribute("class");
+    questionsElement.style.margin = "100px auto 0 auto";
+    questionsElement.style.width = "50%";
+    feedbackElement.style.visibility = "visible"; 
 
     // show starting time
     timeElement.textContent = timeLeft;
@@ -69,19 +76,23 @@ function getQuestion() {
 
         choiceButton.addEventListener('click', getQuestion); // to show the next question when clicked
         choiceButton.addEventListener('click', function() { // every button has this function but only the button that is clicked would run it! the button that is clicked is choice[i]!
-            let chosenAnswer = choice[i];
+            let chosenAnswer = choice[i]; // when the user clicks on any choice button, that choice IS the chosen answer
             subtractTime(correctAnswer, chosenAnswer);
+        });
+        choiceButton.addEventListener('click', function() {
+            let chosenAnswer = choice[i];
+            showFeedback(correctAnswer, chosenAnswer);
         }); 
     }
 
     currentQuestionIndex++;
 }
 
-function subtractTime(correctAnswer, chosenAnswer) { // need to pass in both parameters for comparison before penalty
-    console.log('show correct answer when subtractTime runs after clicking a choice button');
-    console.log(correctAnswer);
-    console.log('show chosen answer');
-    console.log(chosenAnswer);
+function subtractTime(correctAnswer, chosenAnswer) { // NOTE: need to pass in both parameters for comparison before penalty
+    // console.log('show correct answer when subtractTime runs after clicking a choice button');
+    // console.log(correctAnswer);
+    // console.log('show chosen answer');
+    // console.log(chosenAnswer);
 
     // if (timeLeft === 0) {
     //     return;
@@ -89,36 +100,51 @@ function subtractTime(correctAnswer, chosenAnswer) { // need to pass in both par
 
     if (chosenAnswer !== correctAnswer && timeLeft > 14) {
         timeLeft -= 15;
-        console.log(timeLeft);
+        // console.log(timeLeft);
+    }
+}
+
+function showFeedback(correctAnswer, chosenAnswer) {
+    if (chosenAnswer === correctAnswer) {
+        feedbackElement.textContent = 'Correct! ✅';
+    } else {
+        feedbackElement.textContent = 'Wrong! ❌';
     }
 }
 
 function showEndScreen() {
-    // hide questions
+    // hide feedback and questions
+    feedbackElement.setAttribute("class", "hide");
     questionsElement.setAttribute("class", "hide");
 
     // show end screen
     endScreenElement.removeAttribute("class");
 
     // render timeLeft as final score
-    finalScore.textContent = timeLeft;
-    console.log(finalScore);
+    finalScore.textContent = timeLeft; // timeLeft is a string (e.g. "56")
+    score = parseInt(finalScore.textContent); // so need to convert string to number
+    // console.log(score);
 }
 
 // also need to store scores in local object so that i can take them out and display in highscores.html right?
-submitButton.addEventListener("click", function(event) {
-    event.preventDefault();
-
+function saveScores() {
     let initial = initialInput.value.trim();
 
     if (initial !== '') {
-        let storedScores = {
+        let scoreArray = JSON.parse(window.localStorage.getItem('scoreArray')) || []; // take out scoreArray from local storage if previous scores are there or set to empty array
+        // MUST PUT || [] AT THE END FOR NEW SCORE TO BE ADDED TO ARRAY EVERY TIME... WHY??
+        let newScore = {
             initial: initial,
-            score: finalScore.textContent,
+            score: score,
         };
 
-        localStorage.setItem("stored scores", JSON.stringify(storedScores));
+        scoreArray.push(newScore); // add newScore to scoreArray every time submit button is clicked
+        console.log(scoreArray);
+
+        window.localStorage.setItem('scoreArray', JSON.stringify(scoreArray));
 
         window.location.href = 'score-record.html';
     }
-})
+}
+
+submitButton.addEventListener("click", saveScores); // runs saveScores() every time users click submit
