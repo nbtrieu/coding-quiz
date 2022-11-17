@@ -54,6 +54,7 @@ function getQuestion() {
     // get each question from array of question objects in questions.js
     if (timeLeft <= 0 || currentQuestionIndex === 5) { // to prevent TypeError BUT MAYBE THIS MAKES SUBTRACTTIME STOPS WORKING WHEN CLICK WRONG CHOICE AT LAST QUESTION??
         showEndScreen();
+        clearInterval(timeInterval);
         return; // exit getQuestion
     }
     
@@ -95,6 +96,7 @@ function subtractTime(correctAnswer, chosenAnswer) { // NOTE: need to pass in bo
     } else if (chosenAnswer !== correctAnswer && timeLeft <= 14) {
         timeLeft = 0;
     }
+    timeElement.textContent = timeLeft; // display timeLeft in timeElement box
 }
 
 function showFeedback(correctAnswer, chosenAnswer) {
@@ -118,6 +120,8 @@ function showEndScreen() {
 
     // show end screen
     endScreenElement.removeAttribute("class");
+    endScreenElement.style.margin = "100px auto 0 auto";
+    endScreenElement.style.width = "50%";
 
     // render timeLeft as final score
     finalScore.textContent = timeLeft; // timeLeft is a string (e.g. "56")
