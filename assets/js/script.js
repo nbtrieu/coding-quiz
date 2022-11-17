@@ -1,5 +1,5 @@
 let currentQuestionIndex = 0; // starting at the element at index=0 in the question array
-let timeLeft = 75;
+let timeLeft = 75; // = questions.length * 15 seconds
 let timeInterval;
 let score;
 
