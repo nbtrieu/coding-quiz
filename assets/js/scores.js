@@ -9,7 +9,7 @@ function renderScores() {
         return b.score - a.score;
     })
 
-    for (let i = 0; i < scoreArray.length; i++) { // WHY ARENT NEW SCORES BEING PUSHED TO THE ARRAY
+    for (let i = 0; i < scoreArray.length; i++) { 
         let scoreListElement = document.createElement('li'); // create a list element for every item in the array
         scoreListElement.textContent = scoreArray[i].initial + ' ➡️ ' + scoreArray[i].score; // add text to list element
 

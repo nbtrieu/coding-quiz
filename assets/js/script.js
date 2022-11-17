@@ -6,7 +6,7 @@ let score;
 let timeElement = document.querySelector("#time-span");
 let startButton = document.querySelector("#start-button");
 let questionsElement = document.querySelector("#questions");
-let questionPromptElement = document.querySelector("#question-prompt"); // can this NOT be global??
+let questionPromptElement = document.querySelector("#question-prompt");
 let choicesElement = document.querySelector("#choices");
 let feedbackElement = document.querySelector("#feedback");
 
@@ -52,7 +52,7 @@ function startQuiz() {
 
 function getQuestion() {
     // get each question from array of question objects in questions.js
-    if (timeLeft <= 0 || currentQuestionIndex === 5) { // to prevent TypeError BUT MAYBE THIS MAKES SUBTRACTTIME STOPS WORKING WHEN CLICK WRONG CHOICE AT LAST QUESTION??
+    if (timeLeft <= 0 || currentQuestionIndex === 5) { // to prevent TypeError
         showEndScreen();
         clearInterval(timeInterval);
         return; // exit getQuestion
@@ -128,13 +128,13 @@ function showEndScreen() {
     score = parseInt(finalScore.textContent); // so need to convert string to number
 }
 
-// also need to store scores in local object so that i can take them out and display in highscores.html right?
+// store scores in local object and link to score-record.html
 function saveScores() {
     let initial = initialInput.value.trim();
 
     if (initial !== '') {
         let scoreArray = JSON.parse(window.localStorage.getItem('scoreArray')) || []; // take out scoreArray from local storage if previous scores are there or set to empty array
-        // MUST PUT || [] AT THE END FOR NEW SCORE TO BE ADDED TO ARRAY EVERY TIME... WHY??
+        // MUST PUT || [] AT THE END FOR NEW SCORE TO BE ADDED TO ARRAY EVERY TIME otherwise scoreArray will always be an empty array. But what we want is that IF JSON.parse(localStorage...) returns null THEN we set it to empty array
         let newScore = {
             initial: initial,
             score: score,
