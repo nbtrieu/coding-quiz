@@ -39,8 +39,8 @@ function startQuiz() {
 
         if (timeLeft >= 1) {
             timeElement.textContent = timeLeft;
-        } else if (timeLeft <= 0 || currentQuestionIndex === 5) {
-            clearInterval(timeInterval); // WHY ISN'T MY TIMER STOPPING???******PRK
+        } else if (timeLeft <= 0) {
+            clearInterval(timeInterval);
             timeElement.textContent = 0;
         }
     }, 1000);
@@ -52,7 +52,7 @@ function startQuiz() {
 
 function getQuestion() {
     // get each question from array of question objects in questions.js
-    if (currentQuestionIndex === 5) { // to prevent TypeError
+    if (timeLeft <= 0 || currentQuestionIndex === 5) { // to prevent TypeError BUT MAYBE THIS MAKES SUBTRACTTIME STOPS WORKING WHEN CLICK WRONG CHOICE AT LAST QUESTION??
         showEndScreen();
         return; // exit getQuestion
     }
@@ -74,7 +74,6 @@ function getQuestion() {
         choiceButton.innerHTML = choice[i]; // to add text to choice buttons
         choicesElement.appendChild(choiceButton); // to append choice buttons to the choice div container
 
-        choiceButton.addEventListener('click', getQuestion); // to show the next question when clicked
         choiceButton.addEventListener('click', function() { // every button has this function but only the button that is clicked would run it! the button that is clicked is choice[i]!
             let chosenAnswer = choice[i]; // when the user clicks on any choice button, that choice IS the chosen answer
             subtractTime(correctAnswer, chosenAnswer);
@@ -83,33 +82,33 @@ function getQuestion() {
             let chosenAnswer = choice[i];
             showFeedback(correctAnswer, chosenAnswer);
         }); 
+        choiceButton.addEventListener('click', getQuestion); // to show the next question when clicked
     }
 
     currentQuestionIndex++;
+    console.log(currentQuestionIndex);
 }
 
 function subtractTime(correctAnswer, chosenAnswer) { // NOTE: need to pass in both parameters for comparison before penalty
-    // console.log('show correct answer when subtractTime runs after clicking a choice button');
-    // console.log(correctAnswer);
-    // console.log('show chosen answer');
-    // console.log(chosenAnswer);
-
-    // if (timeLeft === 0) {
-    //     return;
-    // }
-
-    if (chosenAnswer !== correctAnswer && timeLeft > 14) {
+    if (chosenAnswer !== correctAnswer && timeLeft > 14) { // to prevent timer from going into negative seconds
         timeLeft -= 15;
-        // console.log(timeLeft);
+    } else if (chosenAnswer !== correctAnswer && timeLeft <= 14) {
+        timeLeft = 0;
     }
 }
 
 function showFeedback(correctAnswer, chosenAnswer) {
+    feedbackElement.style.visibility = "visible"; 
+
     if (chosenAnswer === correctAnswer) {
         feedbackElement.textContent = 'Correct! ✅';
-    } else {
+    } else if (chosenAnswer !== correctAnswer) {
         feedbackElement.textContent = 'Wrong! ❌';
     }
+
+    setTimeout(function() {
+        feedbackElement.style.visibility = "hidden";
+    }, 500)
 }
 
 function showEndScreen() {
@@ -123,7 +122,6 @@ function showEndScreen() {
     // render timeLeft as final score
     finalScore.textContent = timeLeft; // timeLeft is a string (e.g. "56")
     score = parseInt(finalScore.textContent); // so need to convert string to number
-    // console.log(score);
 }
 
 // also need to store scores in local object so that i can take them out and display in highscores.html right?
